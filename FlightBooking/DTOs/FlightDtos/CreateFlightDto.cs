@@ -1,13 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace FlightBooking.Entities
+﻿namespace FlightBooking.DTOs.FlightDtos
 {
-    public class Flight
+    public class CreateFlightDto
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string FlightId { get; set; }
         public string FlightNumber { get; set; } //TK1234, PC2023
         public string AirlineCode { get; set; } //TK, PC, LH
 
@@ -26,6 +20,5 @@ namespace FlightBooking.Entities
         public decimal BasePrice { get; set; }
         public string Currency { get; set; } //USD, EUR, TRY
         public string Status { get; set; } //Scheduled, Delayed, Cancelled, Boarding, Departed
-
     }
 }

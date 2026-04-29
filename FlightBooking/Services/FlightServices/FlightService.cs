@@ -1,5 +1,6 @@
 ﻿ using AutoMapper;
 using FlightBooking.DTOs.FlightDtos;
+using FlightBooking.DTOs.PassengerDtos;
 using FlightBooking.Entities;
 using FlightBooking.Settings;
 using MongoDB.Driver;
@@ -10,14 +11,17 @@ namespace FlightBooking.Services.FlightServices
     {
         private readonly IMapper _mapper;
         private readonly IMongoCollection<Flight> _flightCollection;
+        private readonly IMongoCollection<Booking> _bookingCollection;
 
         public FlightService(IMapper mapper, IDatabaseSettings _databaseSettings)
         {
             var client = new MongoClient(_databaseSettings.ConnectionString);
             var database = client.GetDatabase(_databaseSettings.DatabaseName);
             _flightCollection = database.GetCollection<Flight>(_databaseSettings.FlightCollectionName);
+            _bookingCollection = database.GetCollection<Booking>(_databaseSettings.BookingCollectionName);
 
             _mapper = mapper;
+           
         }
         public async Task CreateFlightAsync(CreateFlightDto createFlightDto)
         {
@@ -40,6 +44,26 @@ namespace FlightBooking.Services.FlightServices
         {
             var value = await _flightCollection.Find(x => x.FlightId == id).FirstOrDefaultAsync();
             return _mapper.Map<GetFlightByIdDto>(value);
+        }
+
+        public async Task<List<PassengerListItemDto>> GetFlightDetailsWithPassengers(string id)
+        {
+            var bookings = await _bookingCollection.Find(x => x.FlightId == id).ToListAsync();
+            var passengers = bookings
+                .SelectMany(b => b.Passengers.Select(p => new PassengerListItemDto
+                {
+                    Name = p.Name,
+                    Surname = p.Surname,
+                    Email = b.ContactEmail,
+                    Gender = p.Gender,
+                    PassengerType = p.PassengerType,
+                    Phone = b.ContactPhone,
+                    SeatNumber = p.SeatNumber,
+                    CheckInStatus = p.CheckInStatus,
+                    PaymentStatus = p.PaymentStatus,
+                    TicketStatus = p.TicketStatus,
+                })).ToList();
+            return passengers;
         }
 
         public async Task UpdateFlightAsync(UpdateFlightDto updateFlightDto)

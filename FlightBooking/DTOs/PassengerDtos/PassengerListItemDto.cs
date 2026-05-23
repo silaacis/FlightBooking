@@ -2,7 +2,7 @@
 {
     public class PassengerListItemDto
     {
-        //public string PassengerId { get; set; }
+        public string PassengerId { get; set; }
 
         // Yolcu kolonu
         public string Name { get; set; }
@@ -11,7 +11,7 @@
 
         // Cinsiyet
         public string Gender { get; set; }            // Erkek / Kadın
-        public string Pnr { get; set; }            // Erkek / Kadın
+        public string PnrNumber { get; set; }            // PNR Numarası
 
         // Tip
         public string PassengerType { get; set; }     // Yetişkin / Çocuk / Bebek

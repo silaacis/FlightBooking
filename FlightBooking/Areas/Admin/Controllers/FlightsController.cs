@@ -42,7 +42,13 @@ namespace FlightBooking.Areas.Admin.Controllers
             ViewBag.DepartureTime = flight?.DepartureTime;   // DateTime? olarak gider
             ViewBag.ArrivalTime = flight?.ArrivalTime;
             ViewBag.TotalSeats = flight?.TotalSeats ?? 0;
-            ViewBag.Status = flight?.Status ?? "—"; 
+            ViewBag.Status = flight?.Status ?? "—";
+
+            TempData["flightNumber"] = flight.FlightNumber;
+            TempData["DepartureTime"] = flight.DepartureTime;
+            TempData["ArrivalTime"] = flight.ArrivalTime;
+
+
             return View(passengers);
         }
     }

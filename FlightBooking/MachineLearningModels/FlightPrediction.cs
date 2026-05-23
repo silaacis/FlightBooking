@@ -2,7 +2,7 @@
 {
     public class FlightPrediction
     {
-        public bool PredictLabel { get; set; }
+        public bool PredictedLabel { get; set; }
         public float Probability { get; set; }
         public float Score { get; set; }
     }
